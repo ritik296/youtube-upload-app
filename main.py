@@ -17,7 +17,7 @@ from googleapiclient.http import MediaFileUpload
 
 scopes = ["https://www.googleapis.com/auth/youtube.upload"]
 
-def authentication():
+def authentication_app():
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
     api_service_name = "youtube"
     api_version = "v3"
@@ -44,7 +44,7 @@ def authentication():
     
     return youtube
 
-def upload_video(youtube, title):
+def upload_on_youtube(youtube, title):
     # Disable OAuthlib's HTTPS verification when running locally.
     # *DO NOT* leave this option enabled in production.
 
@@ -70,7 +70,7 @@ def upload_video(youtube, title):
     print(response)
     delete_file(title)
 
-def download_video_series(download_url):
+def download_from_link(download_url):
 
     movie_title = download_url.split("/")[-1]
 
@@ -100,10 +100,10 @@ def download_video_series(download_url):
 
             print("Video downloaded")
 
-def delete_file(title):
+def delete_existing_file(title):
     os.remove(title)
 
-def download_torrent(file_name):
+def download_torrent_file(file_name):
     qb = Client("http://127.0.0.1:8080/")
 
     qb.login("admin", "Ritik@4")
@@ -111,7 +111,7 @@ def download_torrent(file_name):
     torrent_file = open(file_name, "rb")
     qb.download_from_file(torrent_file)
 
-def get_video_name():
+def get_video_name_list():
     for x in os.listdir():
         if x.endswith(".mp4"):
             print(x)
@@ -122,7 +122,7 @@ if __name__ == "__main__":
     movie_link_note_id = '1YMbT7XbFgq8Vq_GbMD3Dhfj2fNf-jJC_TRcdUt9bfVJFkuWzNUDIUn9pUoIP9g'
     error_log_id = '1NO5GQfgTDr5k3xd4GKUsQaS1GDXumEiCXRkDH-UZGNVflYEtDEAfsi0iOu7Z-sQ'
 
-    youtube = authentication()
+    youtube = authentication_app()
     # download_url_list = input("Enter all link of movie with ',' splited form :- ")
 
     while True:
@@ -134,9 +134,9 @@ if __name__ == "__main__":
                 for link in movie_links:
                     try:
                         title = link.split("/")[-1]
-                        download_video_series(link)
+                        download_from_link(link)
                         time.sleep(1)
-                        upload_video(youtube, title)
+                        upload_on_youtube(youtube, title)
                     except Exception as err:
                         error.append(err)
 
